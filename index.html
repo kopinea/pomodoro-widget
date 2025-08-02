@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Pomodoro Lo-fi</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #1e1e2f;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    input {
+      width: 50px;
+      padding: 5px;
+      margin: 0 5px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border: none;
+      background-color: #ff6b6b;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    iframe {
+      display: none;
+    }
+
+    #timer {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⏳ Pomodoro com Lo-fi 🎧</h1>
+
+  <p>
+    Foco: <input type="number" id="pomodoroTime" value="25">min
+    Descanso: <input type="number" id="breakTime" value="5">min
+  </p>
+
+  <button onclick="startPomodoro()">▶️ Começar</button>
+  <button onclick="resetPomodoro()">⏹️ Resetar</button>
+
+  <p id="timer">00:00</p>
+
+  <iframe
+    id="player"
+    width="0"
+    height="0"
+    src=""
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen
+  ></iframe>
+
+  <script>
+    let timer;
+    let totalSeconds = 0;
+    let isRunning = false;
+    const musicURL = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1";
+
+    function startPomodoro() {
+      if (isRunning) return;
+      isRunning = true;
+
+      const minutes = parseInt(document.getElementById("pomodoroTime").value);
+      totalSeconds = minutes * 60;
+      document.getElementById("player").src = musicURL;
+      updateTimerDisplay();
+
+      timer = setInterval(() => {
+        totalSeconds--;
+        updateTimerDisplay();
+
+        if (totalSeconds <= 0) {
+          clearInterval(timer);
+          document.getElementById("player").src = ""; // parar música
+          isRunning = false;
+          alert("⏰ Acabou! Hora de descansar.");
+        }
+      }, 1000);
+    }
+
+    function resetPomodoro() {
+      clearInterval(timer);
+      document.getElementById("timer").textContent = "00:00";
+      document.getElementById("player").src = "";
+      isRunning = false;
+    }
+
+    function updateTimerDisplay() {
+      const min = Math.floor(totalSeconds / 60);
+      const sec = totalSeconds % 60;
+      document.getElementById("timer").textContent =
+        String(min).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
+    }
+  </script>
+</body>
+</html>
