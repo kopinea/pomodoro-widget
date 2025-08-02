@@ -13,9 +13,15 @@
     }
 
     input {
-      width: 50px;
-      padding: 5px;
-      margin: 0 5px;
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input[type="number"] {
+      width: 60px;
       text-align: center;
     }
 
@@ -27,6 +33,7 @@
       color: white;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 1rem;
     }
 
     iframe {
@@ -34,8 +41,13 @@
     }
 
     #timer {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .section {
+      margin: 20px 0;
     }
   </style>
 </head>
@@ -43,15 +55,27 @@
 
   <h1>⏳ Pomodoro com Lo-fi 🎧</h1>
 
-  <p>
-    Foco: <input type="number" id="pomodoroTime" value="25">min
-    Descanso: <input type="number" id="breakTime" value="5">min
-  </p>
+  <div class="section">
+    <label>Tempo de foco:</label>
+    <input type="number" id="pomodoroTime" value="25"> min
+    <label>Descanso:</label>
+    <input type="number" id="breakTime" value="5"> min
+  </div>
 
-  <button onclick="startPomodoro()">▶️ Começar</button>
-  <button onclick="resetPomodoro()">⏹️ Resetar</button>
+  <div class="section">
+    <label>🔗 Link embed do YouTube:</label><br>
+    <input type="text" id="youtubeLink"
+      value="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1"
+      style="width: 80%;">
+    <p style="font-size: 0.9rem; opacity: 0.8;">Use link no formato: <code>https://www.youtube.com/embed/ID</code></p>
+  </div>
 
-  <p id="timer">00:00</p>
+  <div class="section">
+    <button onclick="startPomodoro()">▶️ Começar</button>
+    <button onclick="resetPomodoro()">⏹️ Resetar</button>
+  </div>
+
+  <div id="timer">00:00</div>
 
   <iframe
     id="player"
@@ -67,14 +91,15 @@
     let timer;
     let totalSeconds = 0;
     let isRunning = false;
-    const musicURL = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1";
 
     function startPomodoro() {
       if (isRunning) return;
       isRunning = true;
 
       const minutes = parseInt(document.getElementById("pomodoroTime").value);
+      const musicURL = document.getElementById("youtubeLink").value;
       totalSeconds = minutes * 60;
+
       document.getElementById("player").src = musicURL;
       updateTimerDisplay();
 
@@ -84,9 +109,9 @@
 
         if (totalSeconds <= 0) {
           clearInterval(timer);
-          document.getElementById("player").src = ""; // parar música
+          document.getElementById("player").src = ""; // para a música
           isRunning = false;
-          alert("⏰ Acabou! Hora de descansar.");
+          alert("⏰ Acabou o Pomodoro! Vai tomar uma água, bb.");
         }
       }, 1000);
     }
